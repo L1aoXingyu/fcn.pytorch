@@ -6,6 +6,7 @@
 
 import os
 
+import numpy as np
 from PIL import Image
 from torch.utils import data
 
@@ -20,24 +21,19 @@ def read_images(root, train):
 
 
 class VocSegDataset(data.Dataset):
+
     def __init__(self, cfg, train, transforms=None):
         self.cfg = cfg
         self.train = train
         self.transforms = transforms
         self.data_list, self.label_list = read_images(self.cfg.DATASETS.ROOT, train)
-        if cfg.INPUT.IS_CROP:
-            self.data_list = self._filter(self.data_list)
-            self.label_list = self._filter(self.label_list)
-
-    def _filter(self, images):
-        return [img for img in images if (Image.open(img).size[1] >= self.cfg.INPUT.SIZE_TRAIN[0] and
-                                          Image.open(img).size[0] >= self.cfg.INPUT.SIZE_TRAIN[1])]
 
     def __getitem__(self, item):
         img = self.data_list[item]
         label = self.label_list[item]
         img = Image.open(img)
-        label = Image.open(label).convert('RGB')
+        # load label
+        label = Image.open(label)
         img, label = self.transforms(img, label)
         return img, label
 

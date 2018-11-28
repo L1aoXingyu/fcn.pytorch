@@ -21,7 +21,7 @@ def make_data_loader(cfg, is_train=True):
         shuffle = True
     else:
         batch_size = cfg.TEST.IMS_PER_BATCH
-        shuffle = False
+        shuffle = True
 
     transforms = build_transforms(cfg, is_train)
     datasets = build_dataset(cfg, transforms, is_train)

@@ -11,28 +11,40 @@ from layers.conv_layer import conv_layer
 from .backbones import build_backbone
 
 
-class FCN32s(nn.Module):
+class FCN8sAtOnce(nn.Module):
     def __init__(self, cfg):
-        super(FCN32s, self).__init__()
-        self.cfg = cfg
+        super(FCN8sAtOnce, self).__init__()
         self.backbone = build_backbone(cfg)
         num_classes = cfg.MODEL.NUM_CLASSES
 
+        # fc1
         self.fc1 = conv_layer(512, 4096, 7)
         self.relu1 = nn.ReLU(inplace=True)
         self.drop1 = nn.Dropout2d()
 
+        # fc2
         self.fc2 = conv_layer(4096, 4096, 1)
         self.relu2 = nn.ReLU(inplace=True)
         self.drop2 = nn.Dropout2d()
 
         self.score_fr = conv_layer(4096, num_classes, 1)
-        self.upscore = bilinear_upsampling(num_classes, num_classes, 64, stride=32,
-                                           bias=False)
+        self.score_pool3 = conv_layer(256, num_classes, 1)
+        self.score_pool4 = conv_layer(512, num_classes, 1)
+
+        self.upscore2 = bilinear_upsampling(num_classes, num_classes, 4, stride=2, bias=False)
+        self.upscore8 = bilinear_upsampling(num_classes, num_classes, 16, stride=8, bias=False)
+        self.upscore_pool4 = bilinear_upsampling(num_classes, num_classes, 4, stride=2, bias=False)
 
     def forward(self, x):
         _, _, h, w = x.size()
-        x = self.backbone(x)
+        x = self.backbone[0:17](x)
+        pool3 = x  # 1/8
+
+        x = self.backbone[17:24](x)
+        pool4 = x  # 1/16
+
+        x = self.backbone[24:](x)
+
         x = self.relu1(self.fc1(x))
         x = self.drop1(x)
 
@@ -40,8 +52,25 @@ class FCN32s(nn.Module):
         x = self.drop2(x)
 
         x = self.score_fr(x)
-        x = self.upscore(x)
-        x = x[:, :, 19:19 + h, 19:19 + w].contiguous()
+        x = self.upscore2(x)
+        upscore2 = x  # 1/16
+
+        x = self.score_pool4(pool4)
+        x = x[:, :, 5:5 + upscore2.size()[2], 5:5 + upscore2.size()[3]]
+        score_pool4c = x  # 1/16
+
+        x = upscore2 + score_pool4c
+        x = self.upscore_pool4(x)
+        upscore_pool4 = x  # 1/8
+
+        x = self.score_pool3(pool3)
+        x = x[:, :, 9:9 + upscore_pool4.size()[2], 9:9 + upscore_pool4.size()[3]].contiguous()
+        score_pool3c = x  # 1/8
+
+        x = upscore_pool4 + score_pool3c  # 1/8
+
+        x = self.upscore8(x)
+        x = x[:, :, 31:31 + h, 31:31 + w].contiguous()
         return x
 
     def copy_params_from_vgg16(self, vgg16):

@@ -22,7 +22,7 @@ def get_upsampling_weight(in_channels, out_channels, kernel_size):
     bilinear_filter = (1 - abs(og[0] - center) / factor) * (1 - abs(og[1] - center) / factor)
     weight = np.zeros((in_channels, out_channels, kernel_size, kernel_size), dtype=np.float32)
     weight[range(in_channels), range(out_channels), :, :] = bilinear_filter
-    return torch.from_numpy(weight)
+    return torch.from_numpy(weight).float()
 
 
 def bilinear_upsampling(in_channels, out_channels, kernel_size, stride, bias=False):

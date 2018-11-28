@@ -1,0 +1,19 @@
+
+MODEL:
+  META_ARCHITECTURE: "fcn8s"
+
+  BACKBONE:
+    PRETRAINED: True
+    WEIGHT: '/mnt/truenas/scratch/xingyu.liao/model_zoo/vgg16-397923af.pth'
+
+  REFINEMENT:
+    NAME: ''
+
+ DATASETS:
+  ROOT: '/mnt/truenas/scratch/xingyu.liao/DATA/VOCdevkit/VOC2012'
+
+SOLVER:
+  MAX_EPOCHS: 11
+  CHECKPOINT_PERIOD: 11
+
+OUTPUT_DIR: "/mnt/truenas/scratch/xingyu.liao/checkpoints/train_fcn8s_atonce"

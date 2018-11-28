@@ -3,15 +3,18 @@ import unittest
 
 sys.path.append('.')
 from modeling.backbones.vgg import VGG16
-from modeling.fcn32s import FCN32s
+from config import cfg
+from modeling import build_fcn_model
 import torch
 
 
 class MyTestCase(unittest.TestCase):
     def test_vgg(self):
-        model = FCN32s(VGG16(pretrained=True), 21)
-        x = torch.randn(2, 3, 224, 224)
-        y = model(x)
+        model = build_fcn_model(cfg)
+        # x = torch.randn(5, 3, 224, 224)
+        # y = model(x)
+        from IPython import embed;
+        embed()
 
 
 if __name__ == '__main__':

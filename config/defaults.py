@@ -24,20 +24,21 @@ _C.MODEL.META_ARCHITECTURE = "fcn32s"
 
 _C.MODEL.BACKBONE = CN()
 _C.MODEL.BACKBONE.NAME = "vgg16"
-_C.MODEL.BACKBONE.PRETRAINED = True
-_C.MODEL.BACKBONE.LOAD_PATH = '/mnt/truenas/scratch/xingyu.liao/model_zoo/vgg16-397923af.pth'
+_C.MODEL.BACKBONE.PRETRAINED = False
+_C.MODEL.BACKBONE.WEIGHT = ''
+
+_C.MODEL.REFINEMENT = CN()
+_C.MODEL.REFINEMENT.NAME = ''
+_C.MODEL.REFINEMENT.WEIGHT = ''
+
 # -----------------------------------------------------------------------------
 # INPUT
 # -----------------------------------------------------------------------------
 _C.INPUT = CN()
-_C.INPUT.IS_CROP = False
-# Size of the image during training
-_C.INPUT.SIZE_TRAIN = [320, 480]
-# Size of the image during test
-_C.INPUT.SIZE_TEST = 32
 # Random probability for image horizontal flip
 _C.INPUT.PROB = 0.5
 # Values to be used for image normalization
+# _C.INPUT.PIXEL_MEAN = [104.00698793, 116.66876762, 122.67891434]
 _C.INPUT.PIXEL_MEAN = [0.485, 0.456, 0.406]
 # Values to be used for image normalization
 _C.INPUT.PIXEL_STD = [0.229, 0.224, 0.225]
@@ -46,12 +47,8 @@ _C.INPUT.PIXEL_STD = [0.229, 0.224, 0.225]
 # Dataset
 # -----------------------------------------------------------------------------
 _C.DATASETS = CN()
-# List of the dataset names for training, as present in paths_catalog.py
-_C.DATASETS.TRAIN = ()
-# List of the dataset names for testing, as present in paths_catalog.py
-_C.DATASETS.TEST = ()
 # Dataset root path
-_C.DATASETS.ROOT = '/mnt/truenas/scratch/xingyu.liao/DATA/VOCdevkit/VOC2012'
+_C.DATASETS.ROOT = ''
 # -----------------------------------------------------------------------------
 # DataLoader
 # -----------------------------------------------------------------------------
@@ -75,15 +72,8 @@ _C.SOLVER.MOMENTUM = 0.99
 _C.SOLVER.WEIGHT_DECAY = 0.0005
 _C.SOLVER.WEIGHT_DECAY_BIAS = 0
 
-_C.SOLVER.GAMMA = 0.1
-_C.SOLVER.STEPS = (30000,)
-
-_C.SOLVER.WARMUP_FACTOR = 1.0 / 3
-_C.SOLVER.WARMUP_ITERS = 500
-_C.SOLVER.WARMUP_METHOD = "linear"
-
 _C.SOLVER.CHECKPOINT_PERIOD = 10
-_C.SOLVER.LOG_PERIOD = 100
+_C.SOLVER.LOG_PERIOD = 400
 
 # Number of images per batch
 # This is global, so if we have 8 GPUs and IMS_PER_BATCH = 16, each GPU will
@@ -94,8 +84,9 @@ _C.SOLVER.IMS_PER_BATCH = 1
 # see 2 images per batch
 _C.TEST = CN()
 _C.TEST.IMS_PER_BATCH = 1
+_C.TEST.WEIGHT = ""
 
 # ---------------------------------------------------------------------------- #
 # Misc options
 # ---------------------------------------------------------------------------- #
-_C.OUTPUT_DIR = "/mnt/truenas/scratch/xingyu.liao/checkpoints/fcn_train"
+_C.OUTPUT_DIR = ""

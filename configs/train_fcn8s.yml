@@ -1,0 +1,19 @@
+
+MODEL:
+  META_ARCHITECTURE: "fcn8s"
+
+  BACKBONE:
+    PRETRAINED: False
+
+  REFINEMENT:
+    NAME: 'fcn16s'
+    WEIGHT: "/mnt/truenas/scratch/xingyu.liao/checkpoints/train_fcn16s/"
+
+ DATASETS:
+  ROOT: '/mnt/truenas/scratch/xingyu.liao/DATA/VOCdevkit/VOC2012'
+
+SOLVER:
+  MAX_EPOCHS: 7
+  CHECKPOINT_PERIOD: 7
+
+OUTPUT_DIR: "/mnt/truenas/scratch/xingyu.liao/checkpoints/train_fcn8s"

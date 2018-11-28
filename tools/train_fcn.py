@@ -6,10 +6,9 @@
 
 import argparse
 import os
+import sys
 from os import mkdir
 
-from torch import nn
-import sys
 sys.path.append('.')
 from config import cfg
 from data import make_data_loader
@@ -17,13 +16,13 @@ from engine.trainer import do_train
 from modeling import build_fcn_model
 from solver import make_optimizer
 from utils.logger import setup_logger
+from layers.cross_entropy2d import cross_entropy2d
 
 
 def train(cfg):
     model = build_fcn_model(cfg)
 
     optimizer = make_optimizer(cfg, model)
-    scheduler = None
 
     arguments = {}
 
@@ -36,8 +35,7 @@ def train(cfg):
         data_loader,
         val_loader,
         optimizer,
-        None,
-        nn.CrossEntropyLoss(),
+        cross_entropy2d,
     )
 
 
