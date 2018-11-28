@@ -10,7 +10,8 @@ import torch
 
 class MyTestCase(unittest.TestCase):
     def test_vgg(self):
-        model = build_fcn_model(cfg)
+        vgg = VGG16()
+        # model = build_fcn_model(cfg)
         # x = torch.randn(5, 3, 224, 224)
         # y = model(x)
         from IPython import embed;

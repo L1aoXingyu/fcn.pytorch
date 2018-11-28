@@ -1,0 +1,18 @@
+MODEL:
+  META_ARCHITECTURE: "fcn32s"
+
+  BACKBONE:
+    PRETRAINED: False
+
+  REFINEMENT:
+    NAME: ''
+
+DATASETS:
+  ROOT: '/mnt/truenas/scratch/xingyu.liao/DATA/VOCdevkit/VOC2012'
+
+
+TEST:
+  WEIGHT: '/mnt/truenas/scratch/xingyu.liao/checkpoints/train_fcn32s/fcn_model_13.pth'
+
+OUTPUT_DIR: "/mnt/truenas/scratch/xingyu.liao/checkpoints/inference_fcn32s"
+

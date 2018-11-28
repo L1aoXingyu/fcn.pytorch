@@ -45,7 +45,7 @@ def do_train(
                                                             'loss': Loss(loss_fn)}, device=device)
     checkpointer = ModelCheckpoint(output_dir, 'fcn', checkpoint_period, n_saved=10, require_empty=False)
     timer = Timer(average=True)
-    writer = SummaryWriter(output_dir + '/train')
+    writer = SummaryWriter(output_dir + '/board')
 
     # automatically adding handlers via a special `attach` method of `RunningAverage` handler
     RunningAverage(output_transform=lambda x: x).attach(trainer, 'avg_loss')
@@ -104,12 +104,14 @@ def do_train(
     @trainer.on(Events.EPOCH_COMPLETED)
     def plot_output(engine):
         model.eval()
-        val_x, val_y = next(iter(val_loader))
+        dataset = val_loader.dataset
+        idx = np.random.choice(np.arange(len(dataset)), size=1).item()
+        val_x, val_y = dataset[idx]
         val_x = val_x.to(device)
         with torch.no_grad():
-            pred_y = model(val_x)
+            pred_y = model(val_x.unsqueeze(0))
 
-        orig_img, val_y = untransform(val_x.cpu().data[0], val_y[0])
+        orig_img, val_y = untransform(val_x.cpu().data, val_y[0])
         pred_y = pred_y.max(1)[1].cpu().data[0].numpy()
         pred_val = cm[pred_y]
         seg_val = cm[val_y]

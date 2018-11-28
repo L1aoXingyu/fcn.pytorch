@@ -53,7 +53,7 @@ def inference(
     logger.info("Start inferencing")
     evaluator = create_evaluator(model, metrics={'mean_iu': Label_Accuracy(cfg.MODEL.NUM_CLASSES)}, device=device)
 
-    writer = SummaryWriter(output_dir + '/inference')
+    writer = SummaryWriter(output_dir + '/board')
 
     # adding handlers using `evaluator.on` decorator API
     @evaluator.on(Events.EPOCH_COMPLETED)

@@ -35,10 +35,42 @@ class FCN16s(nn.Module):
 
     def forward(self, x):
         _, _, h, w = x.size()
-        x = self.backbone[0:24](x)
+        x = self.backbone.conv1_1(x)
+        x = self.backbone.relu1_1(x)
+        x = self.backbone.conv1_2(x)
+        x = self.backbone.relu1_2(x)
+        x = self.backbone.pool1(x)
+
+        x = self.backbone.conv2_1(x)
+        x = self.backbone.relu2_1(x)
+        x = self.backbone.conv2_2(x)
+        x = self.backbone.relu2_2(x)
+        x = self.backbone.pool2(x)
+
+        x = self.backbone.conv3_1(x)
+        x = self.backbone.relu3_1(x)
+        x = self.backbone.conv3_2(x)
+        x = self.backbone.relu3_2(x)
+        x = self.backbone.conv3_3(x)
+        x = self.backbone.relu3_3(x)
+        x = self.backbone.pool3(x)
+
+        x = self.backbone.conv4_1(x)
+        x = self.backbone.relu4_1(x)
+        x = self.backbone.conv4_2(x)
+        x = self.backbone.relu4_2(x)
+        x = self.backbone.conv4_3(x)
+        x = self.backbone.relu4_3(x)
+        x = self.backbone.pool4(x)
         pool4 = x  # 1/16
 
-        x = self.backbone[24:](x)
+        x = self.backbone.conv5_1(x)
+        x = self.backbone.relu5_1(x)
+        x = self.backbone.conv5_2(x)
+        x = self.backbone.relu5_2(x)
+        x = self.backbone.conv5_3(x)
+        x = self.backbone.relu5_3(x)
+        x = self.backbone.pool5(x)
 
         x = self.relu1(self.fc1(x))
         x = self.drop1(x)
@@ -61,6 +93,8 @@ class FCN16s(nn.Module):
         return x
 
     def copy_params_from_fcn32s(self, fcn32s):
+        # load backbone
+        self.backbone.load_state_dict(fcn32s.backbone.state_dict())
         for name, l1 in fcn32s.named_children():
             try:
                 l2 = getattr(self, name)

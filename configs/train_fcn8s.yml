@@ -7,9 +7,9 @@ MODEL:
 
   REFINEMENT:
     NAME: 'fcn16s'
-    WEIGHT: "/mnt/truenas/scratch/xingyu.liao/checkpoints/train_fcn16s/"
+    WEIGHT: "/mnt/truenas/scratch/xingyu.liao/checkpoints/train_fcn16s/fcn_model_8.pth"
 
- DATASETS:
+DATASETS:
   ROOT: '/mnt/truenas/scratch/xingyu.liao/DATA/VOCdevkit/VOC2012'
 
 SOLVER:

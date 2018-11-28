@@ -14,7 +14,6 @@ from .backbones import build_backbone
 class FCN32s(nn.Module):
     def __init__(self, cfg):
         super(FCN32s, self).__init__()
-        self.cfg = cfg
         self.backbone = build_backbone(cfg)
         num_classes = cfg.MODEL.NUM_CLASSES
 

@@ -19,14 +19,14 @@ Most of the configuration files that we provide are in folder `configs`. You jus
 #### 1. Modify configuration file and run
 You can modify `train_fcn32s.yml` first and run following code
 
-```python
+```bash
 python3 tools/train_net.py --config_file='configs/train_fcn32s.yml'
 ```
 
 #### 2. Modify the cfg parameters
 You can change configuration parameter such as learning rate or max epochs in command line.
 
-```python
+```bash
 python3 tools/train_net.py --config_file='configs/train_fcn32s.yml' SOLVER.BASE_LR 0.0025 SOLVER.MAX_EPOCHS 8
 ``` 
  

@@ -9,11 +9,11 @@ MODEL:
   REFINEMENT:
     NAME: ''
 
- DATASETS:
+DATASETS:
   ROOT: '/mnt/truenas/scratch/xingyu.liao/DATA/VOCdevkit/VOC2012'
 
 SOLVER:
-  MAX_EPOCHS: 11
-  CHECKPOINT_PERIOD: 11
+  MAX_EPOCHS: 13
+  CHECKPOINT_PERIOD: 13
 
 OUTPUT_DIR: "/mnt/truenas/scratch/xingyu.liao/checkpoints/train_fcn32s"

@@ -37,13 +37,43 @@ class FCN8s(nn.Module):
 
     def forward(self, x):
         _, _, h, w = x.size()
-        x = self.backbone[0:17](x)
+        x = self.backbone.conv1_1(x)
+        x = self.backbone.relu1_1(x)
+        x = self.backbone.conv1_2(x)
+        x = self.backbone.relu1_2(x)
+        x = self.backbone.pool1(x)
+
+        x = self.backbone.conv2_1(x)
+        x = self.backbone.relu2_1(x)
+        x = self.backbone.conv2_2(x)
+        x = self.backbone.relu2_2(x)
+        x = self.backbone.pool2(x)
+
+        x = self.backbone.conv3_1(x)
+        x = self.backbone.relu3_1(x)
+        x = self.backbone.conv3_2(x)
+        x = self.backbone.relu3_2(x)
+        x = self.backbone.conv3_3(x)
+        x = self.backbone.relu3_3(x)
+        x = self.backbone.pool3(x)
         pool3 = x  # 1/8
 
-        x = self.backbone[17:24](x)
+        x = self.backbone.conv4_1(x)
+        x = self.backbone.relu4_1(x)
+        x = self.backbone.conv4_2(x)
+        x = self.backbone.relu4_2(x)
+        x = self.backbone.conv4_3(x)
+        x = self.backbone.relu4_3(x)
+        x = self.backbone.pool4(x)
         pool4 = x  # 1/16
 
-        x = self.backbone[24:](x)
+        x = self.backbone.conv5_1(x)
+        x = self.backbone.relu5_1(x)
+        x = self.backbone.conv5_2(x)
+        x = self.backbone.relu5_2(x)
+        x = self.backbone.conv5_3(x)
+        x = self.backbone.relu5_3(x)
+        x = self.backbone.pool5(x)
 
         x = self.relu1(self.fc1(x))
         x = self.drop1(x)
@@ -74,6 +104,7 @@ class FCN8s(nn.Module):
         return x
 
     def copy_params_from_fcn16s(self, fcn16s):
+        self.backbone.load_state_dict(fcn16s.backbone.state_dict())
         for name, l1 in fcn16s.named_children():
             try:
                 l2 = getattr(self, name)
@@ -85,3 +116,38 @@ class FCN8s(nn.Module):
             if l1.bias is not None:
                 assert l1.bias.size() == l2.bias.size()
                 l2.bias.data.copy_(l1.bias.data)
+
+    def copy_params_from_vgg16(self, vgg16):
+        feat = self.backbone
+        features = [
+            feat.conv1_1, feat.relu1_1,
+            feat.conv1_2, feat.relu1_2,
+            feat.pool1,
+            feat.conv2_1, feat.relu2_1,
+            feat.conv2_2, feat.relu2_2,
+            feat.pool2,
+            feat.conv3_1, feat.relu3_1,
+            feat.conv3_2, feat.relu3_2,
+            feat.conv3_3, feat.relu3_3,
+            feat.pool3,
+            feat.conv4_1, feat.relu4_1,
+            feat.conv4_2, feat.relu4_2,
+            feat.conv4_3, feat.relu4_3,
+            feat.pool4,
+            feat.conv5_1, feat.relu5_1,
+            feat.conv5_2, feat.relu5_2,
+            feat.conv5_3, feat.relu5_3,
+            feat.pool5
+        ]
+
+        for l1, l2 in zip(vgg16.features, features):
+            if isinstance(l1, nn.Conv2d) and isinstance(l2, nn.Conv2d):
+                assert l1.weight.size() == l2.weight.size()
+                assert l1.bias.size() == l2.bias.size()
+                l2.weight.data.copy_(l1.weight.data)
+                l2.bias.data.copy_(l1.bias.data)
+        for i, name in zip([0, 3], ['fc1', 'fc2']):
+            l1 = vgg16.classifier[i]
+            l2 = getattr(self, name)
+            l2.weight.data.copy_(l1.weight.data.view(l2.weight.size()))
+            l2.bias.data.copy_(l1.bias.data.view(l2.bias.size()))
