@@ -31,6 +31,21 @@ python3 tools/train_net.py --config_file='configs/train_fcn32s.yml' SOLVER.BASE_
 ``` 
  
 ### Results
+We are training these models on VOC2012 train.txt and testing on val.txt, and we also use torchvision pretrained vgg16 rather than caffe pretrained. So the results maybe are different from the origin paper.
 
+|Model| Epoch | Mean IU |
+|-|-|-|
+| FCN32s| 13 | 55.1|
+| FCN16s| 8 | 54.8| 
+| FCN8s | 7 |  55.7 |  
+| FCN8sAtOnce | 11 |  53.6 |
 
-
+<div align=center>
+<img src='assets/1.png' width="400">
+<img src='assets/2.png' width="400">
+<img src='assets/3.png' width="400">
+<img src='assets/4.png' width="400">
+<img src='assets/5.png' width="400">
+<img src='assets/6.png' width="400">
+<img src='assets/7.png' width="400">
+</div>
