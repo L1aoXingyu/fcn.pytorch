@@ -111,7 +111,7 @@ def do_train(
         with torch.no_grad():
             pred_y = model(val_x.unsqueeze(0))
 
-        orig_img, val_y = untransform(val_x.cpu().data, val_y[0])
+        orig_img, val_y = untransform(val_x.cpu().data, val_y)
         pred_y = pred_y.max(1)[1].cpu().data[0].numpy()
         pred_val = cm[pred_y]
         seg_val = cm[val_y]
