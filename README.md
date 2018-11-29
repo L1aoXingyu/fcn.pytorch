@@ -44,8 +44,8 @@ We are training these models on VOC2012 train.txt and testing on val.txt, and we
 <img src='assets/1.png' width="400">
 <img src='assets/2.png' width="400">
 <img src='assets/3.png' width="400">
-<img src='assets/4.png' width="400">
+<img src='assets/7.png' width="400">
 <img src='assets/5.png' width="400">
 <img src='assets/6.png' width="400">
-<img src='assets/7.png' width="400">
+<img src='assets/4.png' width="400">
 </div>
