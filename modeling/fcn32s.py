@@ -8,7 +8,7 @@ from torch import nn
 
 from layers.bilinear_upsample import bilinear_upsampling
 from layers.conv_layer import conv_layer
-from .backbones import build_backbone
+from .backbone import build_backbone
 
 
 class FCN32s(nn.Module):

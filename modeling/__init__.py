@@ -6,7 +6,7 @@
 
 import torch
 
-from .backbones.vgg import pretrained_vgg
+from .backbone.vgg import pretrained_vgg
 from .fcn16s import FCN16s
 from .fcn32s import FCN32s
 from .fcn8s import FCN8s
