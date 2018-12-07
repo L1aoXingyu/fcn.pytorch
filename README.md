@@ -13,6 +13,19 @@ PyTorch implementation of [Fully Convolutional Networks](https://github.com/shel
 ### Get Started
 The designed architecture follows this guide [PyTorch-Project-Template](https://github.com/L1aoXingyu/PyTorch-Project-Template), you can check each folder's purpose by yourself.
 
+#### Prepare Dataset
+You can open the terminal and run the bash command to get VOC2012 dataset
+
+```bash
+bash get_data.sh
+```
+
+or you can just copy this url download by yourself
+
+```bash
+http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar
+```
+
 ### Training
 Most of the configuration files that we provide are in folder `configs`. You just need to modify `dataset root`, `vgg model weight` and `output directory`. There are a few possibilities:
 
@@ -27,7 +40,7 @@ python3 tools/train_net.py --config_file='configs/train_fcn32s.yml'
 You can change configuration parameter such as learning rate or max epochs in command line.
 
 ```bash
-python3 tools/train_net.py --config_file='configs/train_fcn32s.yml' SOLVER.BASE_LR 0.0025 SOLVER.MAX_EPOCHS 8
+python3 tools/train_fcn.py --config_file='configs/train_fcn32s.yml' SOLVER.BASE_LR 0.0025 SOLVER.MAX_EPOCHS 8
 ``` 
  
 ### Results
