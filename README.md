@@ -33,7 +33,7 @@ Most of the configuration files that we provide are in folder `configs`. You jus
 You can modify `train_fcn32s.yml` first and run following code
 
 ```bash
-python3 tools/train_net.py --config_file='configs/train_fcn32s.yml'
+python3 tools/train_fcn.py --config_file='configs/train_fcn32s.yml'
 ```
 
 #### 2. Modify the cfg parameters
